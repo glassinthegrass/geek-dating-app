@@ -96,7 +96,10 @@ app.delete("/auth/logout", authCtrl.logOut);
 app.put("/auth/updateuser/:id", authCtrl.updateUser);
 app.put("/auth/updatecredentials/:id", authCtrl.updateCredentials);
 
-
+app.use(express.static(__dirname + "/../build"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
+});
 //establish the database connection and start the server
 massive(
   {
