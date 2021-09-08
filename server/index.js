@@ -24,39 +24,40 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-
       maxAge: 1000 * 60 * 525600,
-
     },
-
-  }));
-//sockets io.on connection happens once
-io.on('connection',(socket)=>{
-socket.on('join room',(room)=>{
-  socket.join(room,(err)=>{
-      if (err) console.log('error on join', err);
-      else console.log('joined room', room);
   })
-})
+);
+//sockets io.on connection happens once
+io.on("connection", (socket) => {
+  socket.on("join room", (room) => {
+    socket.join(room, (err) => {
+      if (err) console.log("error on join", err);
+      else console.log("joined room", room);
+    });
+  });
 
-socket.on('new msg',(room,msg)=>{
-//still needs to send to db
-const db = app.get('db')
+  socket.on("new msg", (room, msg) => {
+    //still needs to send to db
+    const db = app.get("db");
 
-  socket.to(room).emit('incoming msg',msg)
+    socket.to(room).emit("incoming msg", msg);
 
-  const { match_id,chat_content, profile_id} = msg;
+    const { match_id, chat_content, profile_id } = msg;
 
-  db.create_chat(match_id, chat_content, profile_id)
-})
-})
+    db.create_chat(match_id, chat_content, profile_id);
+  });
+});
 
 //Controller endpoints here
 
 //PROFILE ENDPOINTS
-//update profile: receives a profile object and sends it to the DB to update that profile object in the DB. 
+//update profile: receives a profile object and sends it to the DB to update that profile object in the DB.
 
-app.get('/api/viewableprofiles/:profile_id', profileController.getViewableProfiles);
+app.get(
+  "/api/viewableprofiles/:profile_id",
+  profileController.getViewableProfiles
+);
 
 //update profile: receives a profile object and sends it to the DB to update that profile object in the DB.
 app.get("/api/getprofile/:profile_id", profileController.getProfile);
@@ -86,7 +87,6 @@ app.get(`/api/matchedchat/:match_id`, chatsController.getMatchedChat);
 app.get(`/api/message/:match_id`, chatsController.getMessage);
 app.post(`/api/chat/:match_id`, chatsController.addChatReply);
 app.put("/api/chat/:chat_id", chatsController.updateChatReply);
-
 
 // Authentication Controller Endpoints
 app.get("/auth/duplicate", authCtrl.duplicate);
