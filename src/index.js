@@ -11,16 +11,16 @@ const customHistory = createBrowserHistory();
 const Router =
   process.env.NODE_ENV === "development" ? HashRouter : BrowserRouter;
 
-  ReactDOM.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <Router history={customHistory}>
-          <App />
-        </Router>
-      </Provider>
-    </React.StrictMode>,
-    document.getElementById("root")
-  );  
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router basename="oneup" history={customHistory}>
+        <App />
+      </Router>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
